@@ -41,7 +41,7 @@ class FileSystemTreeResolver {
 
     private initEventHandlers(): void {
         this.emitter.on(this.SECTION_AND_FILES_WAS_BUILT_EVENT_NAME, (sectionAndFiles: Array<string>) => {
-            console.log(sectionAndFiles);
+            console.log(JSON.stringify(sectionAndFiles));
         });
     }
 
