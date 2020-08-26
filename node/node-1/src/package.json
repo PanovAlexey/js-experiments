@@ -1,0 +1,17 @@
+{
+  "name": "tree",
+  "version": "1.0.0",
+  "description": "Module for displaying the contents of a disk section.",
+  "main": "tree.js",
+  "scripts": {
+    "tree": "node tree.js --path"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^14.6.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  }
+}
