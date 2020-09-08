@@ -201,6 +201,27 @@ const Mutation = new GraphQLObjectType({
                 return event.save();
             }
         },
+        deleteCountry: {
+            type: CountryType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return MongooseCountry.findByIdAndRemove(args.id);
+            }
+        },
+        deleteRegion: {
+            type: RegionType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return MongooseRegion.findByIdAndRemove(args.id);
+            }
+        },
+        deleteEvent: {
+            type: EventType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return MongooseEvent.findByIdAndRemove(args.id);
+            }
+        },
     }
 });
 
