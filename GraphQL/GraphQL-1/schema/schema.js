@@ -89,11 +89,63 @@ const UserType = new GraphQLObjectType({
 const Query = new GraphQLObjectType({
     name: 'Query',
     fields: {
+        country: {
+            type: CountryType,
+            args: {id: {type: GraphQLID}},
+            resolve(parent, args) {
+                return MongooseCountry.findById(args.id);
+            }
+        },
+        region: {
+            type: RegionType,
+            args: {id: {type: GraphQLID}},
+            resolve(parent, args) {
+                return MongooseRegion.findById(args.id);
+            }
+        },
         event: {
             type: EventType,
-            args: {id: {type: GraphQLString}},
+            args: {id: {type: GraphQLID}},
             resolve(parent, args) {
-
+                return MongooseEvent.findById(args.id);
+            }
+        },
+        eventType: {
+            type: EventTypeType,
+            args: {id: {type: GraphQLID}},
+            resolve(parent, args) {
+                return MongooseEventType.findById(args.id);
+            }
+        },
+        user: {
+            type: UserType,
+            args: {id: {type: GraphQLID}},
+            resolve(parent, args) {
+                return MongooseUser.findById(args.id);
+            }
+        },
+        counrties: {
+            type: new GraphQLList(CountryType),
+            resolve(parent, args) {
+                return MongooseCountry.find({});
+            }
+        },
+        regions: {
+            type: new GraphQLList(RegionType),
+            resolve(parent, args) {
+                return MongooseRegion.find({});
+            }
+        },
+        events: {
+            type: new GraphQLList(EventType),
+            resolve(parent, args) {
+                return MongooseEvent.find({});
+            }
+        },
+        users: {
+            type: new GraphQLList(UserType),
+            resolve(parent, args) {
+                return MongooseUser.find({});
             }
         },
     }
