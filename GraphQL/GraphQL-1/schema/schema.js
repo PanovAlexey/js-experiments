@@ -1,6 +1,10 @@
-const graphql = require(`graphql`);
+const MongooseCountry = require(`../models/country`);
+const MongooseRegion = require(`../models/region`);
+const MongooseUser = require(`../models/user`);
+const MongooseEventType = require(`../models/event_type`);
+const MongooseEvent = require(`../models/event`);
 
-const {GraphQLObjectType, GraphQLString, GraphQLSchema} = graphql;
+const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList} = require(`graphql`);
 
 const EventType = new GraphQLObjectType({
     name: `Event`,
