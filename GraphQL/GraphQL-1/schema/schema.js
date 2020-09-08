@@ -203,24 +203,48 @@ const Mutation = new GraphQLObjectType({
         },
         deleteCountry: {
             type: CountryType,
-            args: { id: { type: GraphQLID } },
+            args: {id: {type: GraphQLID}},
             resolve(parent, args) {
                 return MongooseCountry.findByIdAndRemove(args.id);
             }
         },
         deleteRegion: {
             type: RegionType,
-            args: { id: { type: GraphQLID } },
+            args: {id: {type: GraphQLID}},
             resolve(parent, args) {
                 return MongooseRegion.findByIdAndRemove(args.id);
             }
         },
         deleteEvent: {
             type: EventType,
-            args: { id: { type: GraphQLID } },
+            args: {id: {type: GraphQLID}},
             resolve(parent, args) {
                 return MongooseEvent.findByIdAndRemove(args.id);
             }
+        },
+        updateEvent: {
+            type: EventType,
+            args: {
+                id: { type: GraphQLID },
+                created_at: {type: GraphQLString},
+                event_type: {type: GraphQLString},
+                author: {type: GraphQLString},
+                region: {type: GraphQLString},
+            },
+            resolve(parent, args) {
+                return MongooseEvent.findByIdAndUpdate(
+                    args.id,
+                    {
+                        $set: {
+                            created_at: args.created_at,
+                            event_type: args.event_type,
+                            author: args.author,
+                            region: args.region,
+                        }
+                    },
+                    {new: true},
+                );
+            },
         },
     }
 });
