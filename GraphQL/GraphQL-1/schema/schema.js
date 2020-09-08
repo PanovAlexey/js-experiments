@@ -151,6 +151,60 @@ const Query = new GraphQLObjectType({
     }
 });
 
+const Mutation = new GraphQLObjectType({
+    name: `Mutation`,
+    fields: {
+        addCountry: {
+            type: CountryType,
+            args: {
+                name: {type: GraphQLString}
+            },
+            resolve(parent, args) {
+                const country = new MongooseCountry({
+                    name: args.name,
+                });
+
+                return country.save();
+            }
+        },
+        addRegion: {
+            type: RegionType,
+            args: {
+                name: {type: GraphQLString},
+                country: {type: GraphQLString},
+            },
+            resolve(parent, args) {
+                const region = new MongooseRegion({
+                    name: args.name,
+                    country: args.country
+                });
+
+                return region.save();
+            }
+        },
+        addEvent: {
+            type: EventType,
+            args: {
+                created_at: {type: GraphQLString},
+                event_type: {type: GraphQLString},
+                author: {type: GraphQLString},
+                region: {type: GraphQLString},
+            },
+            resolve(parent, args) {
+                const event = new MongooseEvent({
+                    created_at: args.created_at,
+                    event_type: args.event_type,
+                    author: args.author,
+                    region: args.region,
+                });
+
+                return event.save();
+            }
+        },
+    }
+});
+
 module.exports = new GraphQLSchema({
     query: Query,
+    mutation: Mutation,
 });
