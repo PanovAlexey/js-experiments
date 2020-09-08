@@ -6,13 +6,83 @@ const MongooseEvent = require(`../models/event`);
 
 const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList} = require(`graphql`);
 
+const CountryType = new GraphQLObjectType({
+    name: `CountryType`,
+    fields: () => ({
+        id: {type: GraphQLID},
+        name: {type: GraphQLString},
+    })
+});
+
+const RegionType = new GraphQLObjectType({
+    name: `Region`,
+    fields: () => ({
+        id: {type: GraphQLID},
+        name: {type: GraphQLString},
+        country: {
+            type: CountryType,
+            resolve(parent, args) {
+                return MongooseRegion.findById(parent.country);
+            }
+        }
+    })
+});
+
 const EventType = new GraphQLObjectType({
     name: `Event`,
     fields: () => ({
-        id: {type: GraphQLString},
+        id: {type: GraphQLID},
         created_at: {type: GraphQLString},
-        event_type: {type: GraphQLString},
-        author_id: {type: GraphQLString},
+        event_type: {
+            type: EventTypeType,
+            resolve(parent, args) {
+                return MongooseEventType.findById(parent.event_type);
+            }
+        },
+        author: {
+            type: UserType,
+            resolve(parent, args) {
+                return MongooseUser.findById(parent.author);
+            }
+        },
+        region: {
+            type: RegionType,
+            resolve(parent, args) {
+                return MongooseRegion.findOne();
+                return MongooseRegion.findById("5f5635d56a76fbc9a73cbcd9");
+                return MongooseRegion.findById(parent.region);
+            }
+        },
+    })
+});
+
+const EventTypeType = new GraphQLObjectType({
+    name: `EventType`,
+    fields: () => ({
+        id: {type: GraphQLID},
+        name: {type: GraphQLString},
+    })
+});
+
+const UserType = new GraphQLObjectType({
+    name: `User`,
+    fields: () => ({
+        id: {type: GraphQLID},
+        first_name: {type: GraphQLString},
+        last_name: {type: GraphQLString},
+        email: {type: GraphQLString},
+        events: {
+            type: new GraphQLList(EventType),
+            resolve(parent, args) {
+                return MongooseEvent.find({author: parent.id});
+            },
+        },
+        country: {
+            type: CountryType,
+            resolve(parent, args) {
+                return MongooseCountry.find({country: parent.id});
+            }
+        },
     })
 });
 
