@@ -48,8 +48,6 @@ const EventType = new GraphQLObjectType({
         region: {
             type: RegionType,
             resolve(parent, args) {
-                return MongooseRegion.findOne();
-                return MongooseRegion.findById("5f5635d56a76fbc9a73cbcd9");
                 return MongooseRegion.findById(parent.region);
             }
         },
