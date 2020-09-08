@@ -4,13 +4,13 @@ const MongooseUser = require(`../models/user`);
 const MongooseEventType = require(`../models/event_type`);
 const MongooseEvent = require(`../models/event`);
 
-const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList} = require(`graphql`);
+const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList, GraphQLNonNull} = require(`graphql`);
 
 const CountryType = new GraphQLObjectType({
     name: `CountryType`,
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString},
+        name: {type: new GraphQLNonNull(GraphQLString)},
     })
 });
 
@@ -18,7 +18,7 @@ const RegionType = new GraphQLObjectType({
     name: `Region`,
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString},
+        name: {type: new GraphQLNonNull(GraphQLString)},
         country: {
             type: CountryType,
             resolve(parent, args) {
@@ -32,7 +32,7 @@ const EventType = new GraphQLObjectType({
     name: `Event`,
     fields: () => ({
         id: {type: GraphQLID},
-        created_at: {type: GraphQLString},
+        created_at: {type: new GraphQLNonNull(GraphQLString)},
         event_type: {
             type: EventTypeType,
             resolve(parent, args) {
@@ -60,7 +60,7 @@ const EventTypeType = new GraphQLObjectType({
     name: `EventType`,
     fields: () => ({
         id: {type: GraphQLID},
-        name: {type: GraphQLString},
+        name: {type: new GraphQLNonNull(GraphQLString)},
     })
 });
 
@@ -68,9 +68,9 @@ const UserType = new GraphQLObjectType({
     name: `User`,
     fields: () => ({
         id: {type: GraphQLID},
-        first_name: {type: GraphQLString},
-        last_name: {type: GraphQLString},
-        email: {type: GraphQLString},
+        first_name: {type: new GraphQLNonNull(GraphQLString)},
+        last_name: {type: new GraphQLNonNull(GraphQLString)},
+        email: {type: new GraphQLNonNull(GraphQLString)},
         events: {
             type: new GraphQLList(EventType),
             resolve(parent, args) {
@@ -157,7 +157,7 @@ const Mutation = new GraphQLObjectType({
         addCountry: {
             type: CountryType,
             args: {
-                name: {type: GraphQLString}
+                name: {type: new GraphQLNonNull(GraphQLString)}
             },
             resolve(parent, args) {
                 const country = new MongooseCountry({
@@ -170,8 +170,8 @@ const Mutation = new GraphQLObjectType({
         addRegion: {
             type: RegionType,
             args: {
-                name: {type: GraphQLString},
-                country: {type: GraphQLString},
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                country: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve(parent, args) {
                 const region = new MongooseRegion({
@@ -185,10 +185,10 @@ const Mutation = new GraphQLObjectType({
         addEvent: {
             type: EventType,
             args: {
-                created_at: {type: GraphQLString},
-                event_type: {type: GraphQLString},
-                author: {type: GraphQLString},
-                region: {type: GraphQLString},
+                created_at: {type: new GraphQLNonNull(GraphQLString)},
+                event_type: {type: new GraphQLNonNull(GraphQLString)},
+                author: {type: new GraphQLNonNull(GraphQLString)},
+                region: {type: new GraphQLNonNull(GraphQLString)},
             },
             resolve(parent, args) {
                 const event = new MongooseEvent({
@@ -225,7 +225,7 @@ const Mutation = new GraphQLObjectType({
         updateEvent: {
             type: EventType,
             args: {
-                id: { type: GraphQLID },
+                id: {type: GraphQLID},
                 created_at: {type: GraphQLString},
                 event_type: {type: GraphQLString},
                 author: {type: GraphQLString},
